@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Initialize CodePath's parse server
+        Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
+            configuration.applicationId = "CodePath-Parse"
+            configuration.server = "http://45.79.67.127:1337/parse"
+        }))
+        
+        // Persist user-login
+        if let currentUser = PFUser.current() {
+            print("Welcome back \(currentUser.username!) 😀")
+                
+                // TODO: Load Chat view controller and set as root view controller
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let chatViewController = storyboard.instantiateViewController(withIdentifier: "NavController")
+            window?.rootViewController = chatViewController
+        }
+        
         return true
     }
 
